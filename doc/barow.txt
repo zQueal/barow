@@ -1,0 +1,135 @@
+*barow.txt*  A minimalist statusline
+
+                                                                       *barow*
+==============================================================================
+SETTING                                                        *barow-setting*
+
+All settings are optional.
+The default configuration is as follows:
+>
+  let g:barow = {
+      \  'modes': {
+      \    'normal': [' ', 'BarowNormal'],
+      \    'insert': ['i', 'BarowInsert'],
+      \    'replace': ['r', 'BarowReplace'],
+      \    'visual': ['v', 'BarowVisual'],
+      \    'v-line': ['l', 'BarowVisual'],
+      \    'v-block': ['b', 'BarowVisual'],
+      \    'select': ['s', 'BarowVisual'],
+      \    'command': ['c', 'BarowCommand'],
+      \    'shell-ex': ['!', 'BarowCommand'],
+      \    'terminal': ['t', 'BarowTerminal'],
+      \    'prompt': ['p', 'BarowNormal'],
+      \    'inactive': [' ', 'BarowModeNC']
+      \  },
+      \  'statusline': ['Barow', 'BarowNC'],
+      \  'tabline': ['BarowTab', 'BarowTabSel', 'BarowTabFill'],
+      \  'buf_name': {
+      \    'empty': '',
+      \    'hi': ['BarowBufName', 'BarowBufNameNC']
+      \  },
+      \  'read_only': {
+      \    'value': 'ro',
+      \    'hi': ['BarowRO', 'BarowRONC']
+      \  },
+      \  'buf_changed': {
+      \    'value': '*',
+      \    'hi': ['BarowChange', 'BarowChangeNC']
+      \  },
+      \  'tab_changed': {
+      \    'value': '*',
+      \    'hi': ['BarowTChange', 'BarowTChangeNC']
+      \  },
+      \  'line_percent': {
+      \    'hi': ['BarowLPercent', 'BarowLPercentNC']
+      \  },
+      \  'row_col': {
+      \    'hi': ['BarowRowCol', 'BarowRowColNC']
+      \  },
+      \  'modules': []
+      \}
+<
+You can customize any of these values.
+
+Note that for any value you want to customize provide a value with the same data
+structure. Otherwise barow will throw an error and exit.
+
+Note: For `modes`, `buf_changed` and `tab_changed` the text length is
+intentionally set to one character max.
+
+The strings that starts with `Barow*` are highlight groups. To change the
+colors you can give your own groups.
+All `hi` keys and `statusline` key expect a list of two hi groups. First is
+for the statusline of the current window, second for statusline in other
+window.
+Note that you can use |barow#hi| function to define your own groups.
+
+==============================================================================
+MODULES                                                        *barow-modules*
+
+You can add additional modules to your bar in a simple way.
+Available modules:
+
+`barowLSP` https://github.com/doums/barowLSP
+display LSP diagnostic and status
+
+`barowGit` https://github.com/doums/barowGit
+display git current branch
+>
+  Plug 'doums/barow'
+  Plug 'doums/barowGit'
+  Plug 'doums/barowLSP'
+  " ...
+
+  let g:barow = {
+  " ...
+      \  'modules': [
+      \    [ 'barowGit#branch', 'BarowHint' ],
+      \    [ 'barowLSP#error', 'BarowError' ],
+      \    [ 'barowLSP#warning', 'BarowWarning' ],
+      \    [ 'barowLSP#info', 'BarowInfo' ],
+      \    [ 'barowLSP#hint', 'BarowHint' ],
+      \    [ 'barowLSP#coc_status', 'StatusLine' ],
+      \    [ 'barowLSP#ale_status', 'StatusLine' ]
+      \  ]
+      \}
+<
+Each module is a list of two items. The first one is the function to call to
+get the output of the module. The second is the highlight group.
+
+Note that module outputs will only appear in the statusbar of the current
+window.
+
+Note: You can define your own module. To update the statusline call
+|barow#update| function.
+
+                                                                 *barow-color*
+
+Truecolor and 256 colors are supported.
+
+==============================================================================
+API                                                                *barow-api*
+
+                                                                 *barow#update*
+
+To update the statusline call `barow#update` function. Useful if you write
+a module.
+>
+  call barow#update()
+<
+
+                                                                    *barow#hi*
+
+You can use `barow#hi` function to create your own highlight groups.
+>
+  " arguments:   group_name,     fg_color,       bg_color,    style (optional)
+  call barow#hi('MyCustomGroup', ['#ffffff', 7], ['#000000', 0], 'bold')
+<
+For more details see |highlight-args|.
+
+==============================================================================
+LICENSE                                                        *barow-license*
+
+Mozilla Public License 2.0
+https://mozilla.org/MPL/2.0/
+
